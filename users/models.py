@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
 
+from courses.models import Course, Lesson
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -36,3 +38,20 @@ class User(AbstractBaseUser):
 
     def __str__(self):
         return self.email
+
+
+class Payment(models.Model):
+    PAYMENT_METHOD_CHOICES = [
+        ('cash', 'Наличные'),
+        ('transfer', 'Перевод на счет'),
+    ]
+
+    user = models.ForeignKey(User, related_name='payments', on_delete=models.CASCADE)
+    payment_date = models.DateTimeField(auto_now_add=True)
+    paid_course = models.ForeignKey(Course, null=True, blank=True, on_delete=models.CASCADE)
+    paid_lesson = models.ForeignKey(Lesson, null=True, blank=True, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_method = models.CharField(max_length=10, choices=PAYMENT_METHOD_CHOICES)
+
+    def __str__(self):
+        return f"{self.user} - {self.amount} ({self.payment_method})"

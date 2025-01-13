@@ -54,6 +54,23 @@ python manage.py runserver
 - GET /users/profile/{id}/ - Получение информации о пользователе
 - PUT /users/profile/{id}/ - Обновление информации о пользователе
 - DELETE /users/profile/{id}/ - Удаление пользователя
+### Платежи
+- POST /users/payments/ - Создание нового платежа
+- GET /users/payments/{id}/ - Получение информации о платеже
+- PUT /users/payments/{id}/ - Обновление информации о платеже
+- DELETE /users/payments/{id}/ - Удаление платежа
+### Кастомная команда для заполнения платежей
+```bash
+python manage.py populate_payments
+```
+### Фильтрация и сортировка
+Добавлены возможности фильтрации и сортировки для платежей:
+- paid_course - сортировка по курсу
+- paid_lesson - сортировка по уроку
+- payment_method - сортировка по методу платежа
+### Пример запроса сортировки
+- Метод: GET
+- URL: http://localhost:8000/users/payments/?paid_course=1&payment_method=cash
 ### Курсы
 - POST /api/courses/ - Создание нового курса
 - GET /api/courses/{id}/ - Получение информации о курсе
@@ -66,6 +83,13 @@ python manage.py runserver
 - PUT /api/lessons/{id}/ - Обновление информации об уроке
 - DELETE /api/lessons/{id}/ - Удаление урока
 - GET /api/courses/{course_id}/lessons/ - Получение списка всех уроков для конкретного курса
+### Вложенность
+- Курсы 
+Теперь, когда вы делаете запрос к курсу, также выводятся вложенные уроки. 
+Это позволяет вам получать всю необходимую информацию о курсе и связанных с ним уроках в одном запросе.
+- Пользователи
+Теперь в профиле пользователя также отображаются вложенные платежи. 
+- Это позволяет получить информацию о платежах, связанных с конкретным пользователем, в одном запросе.
 ## Примеры запросов в Postman
 1. Создание нового пользователя
 - Метод: POST
@@ -73,11 +97,10 @@ python manage.py runserver
 - Тело запроса (формат JSON):
 ```bash
 {
-    "username": "newuser",
-    "email": "newuser@example.com",
-    "password": "strongpassword",
-    "first_name": "Имя",
-    "last_name": "Фамилия"
+    "email": "user@example.com",
+    "phone": "+1234567890",
+    "city": "CityName",
+    "password": "your_password"
 }
 ```
 2. Создание нового курса
@@ -87,7 +110,6 @@ URL: http://localhost:8000/api/courses/
 ```bash
 {
     "title": "Название курса",
-    "preview_image": "URL_картинки_предпросмотра",
     "description": "Описание курса"
 }
 ```
