@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'django_filters',
+    'drf_yasg',
 
     'users',
     'courses',
@@ -140,3 +141,6 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_USE': True,
 }
+
+STRIPE_TEST_SECRET_KEY = "sk_test_51Ql70xCyAdEvv3cucE37l69nvZDAIL9R0uTJfbSPoeARs6CK4V5g6HYxmaLIicuvnN8yneCBahmFNxsbYPhEK5N100ADUBmopf"
+STRIPE_TEST_PUBLISHABLE_KEY = "pk_test_51Ql70xCyAdEvv3cuunoBnDAS4ddf7hkLnu7VXlo6PO5FaoJy8WALlvwowLJ9yTGxXoiX4mgeZsnb7twPzYGEkp6300vEkfRGJq"

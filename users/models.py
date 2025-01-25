@@ -44,6 +44,7 @@ class Payment(models.Model):
     PAYMENT_METHOD_CHOICES = [
         ('cash', 'Наличные'),
         ('transfer', 'Перевод на счет'),
+        ('stripe', 'Stripe'),
     ]
 
     user = models.ForeignKey(User, related_name='payments', on_delete=models.CASCADE)
@@ -52,6 +53,8 @@ class Payment(models.Model):
     paid_lesson = models.ForeignKey(Lesson, null=True, blank=True, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_method = models.CharField(max_length=10, choices=PAYMENT_METHOD_CHOICES)
+    stripe_session_id = models.CharField(max_length=255, null=True, blank=True)
+    payment_status = models.CharField(max_length=50, default='pending')
 
     def __str__(self):
         return f"{self.user} - {self.amount} ({self.payment_method})"
