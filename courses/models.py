@@ -5,6 +5,7 @@ class Course(models.Model):
     title = models.CharField(max_length=255)
     preview_image = models.ImageField(upload_to='courses/previews/')
     description = models.TextField()
+    updated_at = models.DateTimeField(auto_now=True)
 
     owner = models.ForeignKey('users.User', on_delete=models.CASCADE, default=1)
 

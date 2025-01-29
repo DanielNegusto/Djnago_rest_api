@@ -7,6 +7,7 @@ from .paginators import CustomPageNumberPagination
 from .serializers import CourseSerializer, LessonSerializer
 from .permissions import IsModerator, IsOwner
 from rest_framework.permissions import IsAuthenticated
+from .tasks import send_course_update_email
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -54,6 +55,19 @@ class CourseViewSet(viewsets.ModelViewSet):
         Сохраняет новый курс с указанием владельца.
         """
         serializer.save(owner=self.request.user)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+
+            print(f"Отправка уведомления для курса {instance.id}")
+            send_course_update_email.delay(instance.id)
+
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LessonViewSet(viewsets.ModelViewSet):
