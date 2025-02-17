@@ -14,6 +14,7 @@ from pathlib import Path
 from datetime import timedelta
 from decouple import config
 from celery.schedules import crontab
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&4+s1pjc(iz5d3(b5hzl)39dlg+thcm0*@v0pjif*6rjox!32k'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -145,8 +146,8 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_USE': True,
 }
 
-STRIPE_TEST_SECRET_KEY = "sk_test_51Ql70xCyAdEvv3cucE37l69nvZDAIL9R0uTJfbSPoeARs6CK4V5g6HYxmaLIicuvnN8yneCBahmFNxsbYPhEK5N100ADUBmopf"
-STRIPE_TEST_PUBLISHABLE_KEY = "pk_test_51Ql70xCyAdEvv3cuunoBnDAS4ddf7hkLnu7VXlo6PO5FaoJy8WALlvwowLJ9yTGxXoiX4mgeZsnb7twPzYGEkp6300vEkfRGJq"
+STRIPE_TEST_SECRET_KEY = config('STRIPE_TEST_SECRET_KEY')
+STRIPE_TEST_PUBLISHABLE_KEY = config('STRIPE_TEST_PUBLISHABLE_KEY')
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
