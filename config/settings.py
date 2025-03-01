@@ -141,7 +141,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Директории, где Django будет искать дополнительные статические файлы
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # Пример директории для ваших статических файлов
+    os.path.join(BASE_DIR, 'staticfiles'),  # Пример директории для ваших статических файлов
     # Добавьте другие директории, если нужно
 ]
 
