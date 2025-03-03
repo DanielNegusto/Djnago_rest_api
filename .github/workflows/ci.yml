@@ -77,8 +77,13 @@ jobs:
       - name: Deploy to Server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-            docker stop myapp || true
-            docker rm myapp || true
-            sudo docker run -d --name myapp -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+          echo "Pulling Docker image..."
+          docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+          echo "Stopping existing container..."
+          docker stop myapp || true
+          echo "Removing existing container..."
+          docker rm myapp || true
+          echo "Starting new container..."
+          sudo docker run -d --name myapp -p 80:8000 -e SECRET_KEY=${{ secrets.SECRET_KEY }} ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+          echo "Deployment complete."
           EOF
