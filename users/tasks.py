@@ -13,4 +13,4 @@ def check_inactive_users():
     for user in inactive_users:
         user.is_active = False
         user.save()
-        print(f'User  {user.email} has been deactivated.')
+        print(f"User  {user.email} has been deactivated.")
