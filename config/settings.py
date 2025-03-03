@@ -163,28 +163,3 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_USE": True,
 }
 
-STRIPE_TEST_SECRET_KEY = config("STRIPE_TEST_SECRET_KEY")
-STRIPE_TEST_PUBLISHABLE_KEY = config("STRIPE_TEST_PUBLISHABLE_KEY")
-
-CELERY_BROKER_URL = config("CELERY_BROKER_URL")
-CELERY_RESULT_BACKEND = config("CELERY_RESULT_BACKEND")
-
-CELERY_ACCEPT_CONTENT = ["json"]
-CELERY_TASK_SERIALIZER = "json"
-CELERY_TIMEZONE = "UTC"
-
-CELERY_BEAT_SCHEDULE = {
-    "check_inactive_users": {
-        "task": "users.tasks.check_inactive_users",
-        "schedule": 30,
-    },
-}
-
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
-EMAIL_HOST_USER = config("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
