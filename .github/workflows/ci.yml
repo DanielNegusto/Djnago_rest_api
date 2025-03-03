@@ -67,7 +67,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: test
-
+    env: # Здесь вы можете определить переменные окружения
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
     steps:
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.8.0

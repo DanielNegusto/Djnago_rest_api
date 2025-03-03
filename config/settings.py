@@ -104,8 +104,8 @@ else:
             "NAME": config("POSTGRES_DB"),
             "USER": config("POSTGRES_USER"),
             "PASSWORD": config("POSTGRES_PASSWORD"),
-            "HOST": config("DATABASE_HOST"),
-            "PORT": config("DATABASE_PORT"),
+            "HOST": "db",
+            "PORT": "5432",
         }
     }
 
