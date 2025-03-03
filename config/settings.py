@@ -162,4 +162,3 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_USE": True,
 }
-
