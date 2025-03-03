@@ -45,7 +45,8 @@ python manage.py runserver
 
 Теперь ваше приложение доступно по адресу http://localhost:8000/.
 
-## Github Action
+## GitHub Action
+В этом проекте реализован пайплайн от гита.
 
 ## Celery
 
