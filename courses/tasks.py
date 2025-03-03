@@ -10,8 +10,8 @@ def send_course_update_email(course_id):
 
     for subscriber in subscribers:
         send_mail(
-            subject=f'Обновление курса: {course.title}',
+            subject=f"Обновление курса: {course.title}",
             message=f'Курс "{course.title}" был обновлен. Проверьте новые материалы!',
-            from_email='your_email@example.com',
+            from_email="your_email@example.com",
             recipient_list=[subscriber.user.email],
         )

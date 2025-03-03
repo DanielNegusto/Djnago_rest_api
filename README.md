@@ -45,6 +45,25 @@ python manage.py runserver
 
 Теперь ваше приложение доступно по адресу http://localhost:8000/.
 
+## GitHub Action
+В этом проекте реализован пайплайн от гита.
+
+Позволяет проверить и развернуть сервер после изменений
+Для использования добавьте secrets в github action
+DEPLOY_DIR - директория сервера
+DOCKER_HUB_ACCESS_TOKEN - токен докера
+DOCKER_HUB_USERNAME - никнейм докер хаб
+EMAIL_HOST_PASSWORD - пароль приложения смтп
+EMAIL_HOST_USER - почта смтп сервера
+POSTGRES_DB - название базы данных
+POSTGRES_PASSWORD - пароль бд
+POSTGRES_USER - пользователь бд
+SECRET_KEY - секретный ключ django
+SERVER_IP - ip сервера
+SSH_KEY - ваш ssh ключ
+SSH_USER - ssh пользователь
+STRIPE_TEST_SECRET_KEY - ключ stripe
+
 ## Celery
 
 В этом проекте реализована функциональность для отправки уведомлений пользователям и управления их активностью с использованием Celery и Google SMTP сервера.

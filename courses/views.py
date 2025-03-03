@@ -15,6 +15,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     ViewSet для управления курсами.
     Позволяет создавать, обновлять, частично обновлять, удалять и просматривать курсы.
     """
+
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
     pagination_class = CustomPageNumberPagination
@@ -23,11 +24,11 @@ class CourseViewSet(viewsets.ModelViewSet):
         """
         Определяет разрешения для действий в зависимости от типа действия.
         """
-        if self.action in ['create']:
+        if self.action in ["create"]:
             self.permission_classes = [IsAuthenticated]
-        elif self.action in ['update', 'partial_update']:
+        elif self.action in ["update", "partial_update"]:
             self.permission_classes = [IsAuthenticated, IsOwner | IsModerator]
-        elif self.action in ['destroy']:
+        elif self.action in ["destroy"]:
             self.permission_classes = [IsAuthenticated, IsOwner]
         else:
             self.permission_classes = [IsAuthenticated]
@@ -42,7 +43,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         или на которые он подписан.
         """
         user = self.request.user
-        if user.groups.filter(name='Moderators').exists():
+        if user.groups.filter(name="Moderators").exists():
             return Course.objects.all()
 
         subscribed_courses = Course.objects.filter(subscription__user=user)
@@ -75,6 +76,7 @@ class LessonViewSet(viewsets.ModelViewSet):
     ViewSet для управления уроками.
     Позволяет создавать, обновлять, частично обновлять, удалять и просматривать уроки.
     """
+
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
     pagination_class = CustomPageNumberPagination
@@ -83,11 +85,11 @@ class LessonViewSet(viewsets.ModelViewSet):
         """
         Определяет разрешения для действий в зависимости от типа действия.
         """
-        if self.action in ['create']:
+        if self.action in ["create"]:
             self.permission_classes = [IsAuthenticated]
-        elif self.action in ['update', 'partial_update']:
+        elif self.action in ["update", "partial_update"]:
             self.permission_classes = [IsAuthenticated, IsOwner | IsModerator]
-        elif self.action in ['destroy']:
+        elif self.action in ["destroy"]:
             self.permission_classes = [IsAuthenticated, IsOwner]
         else:
             self.permission_classes = [IsAuthenticated]
@@ -101,7 +103,7 @@ class LessonViewSet(viewsets.ModelViewSet):
         иначе возвращает только уроки, принадлежащие текущему пользователю.
         """
         user = self.request.user
-        if user.groups.filter(name='Moderators').exists():
+        if user.groups.filter(name="Moderators").exists():
             return Lesson.objects.all()
         return Lesson.objects.filter(owner=user)
 
@@ -117,16 +119,16 @@ class SubscriptionView(APIView):
 
     def post(self, request, *args, **kwargs):
         user = request.user
-        course_id = request.data.get('course_id')
+        course_id = request.data.get("course_id")
         course_item = get_object_or_404(Course, id=course_id)
 
         subs_item = Subscription.objects.filter(user=user, course=course_item)
 
         if subs_item.exists():
             subs_item.delete()
-            message = 'Подписка удалена'
+            message = "Подписка удалена"
         else:
             Subscription.objects.create(user=user, course=course_item)
-            message = 'Подписка добавлена'
+            message = "Подписка добавлена"
 
         return Response({"message": message}, status=status.HTTP_200_OK)

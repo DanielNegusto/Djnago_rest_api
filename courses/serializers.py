@@ -5,17 +5,19 @@ from .validators import validate_video_url
 
 class LessonSerializer(serializers.ModelSerializer):
     video_link = serializers.URLField(required=False, validators=[validate_video_url])
-    course = serializers.PrimaryKeyRelatedField(required=False, queryset=Course.objects.all())
+    course = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=Course.objects.all()
+    )
 
     class Meta:
         model = Lesson
-        fields = ['id', 'owner', 'title', 'description', 'video_link', 'course']
+        fields = ["id", "owner", "title", "description", "video_link", "course"]
 
     def create(self, validated_data):
         return Lesson.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        course = validated_data.pop('course', None)
+        course = validated_data.pop("course", None)
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
@@ -34,14 +36,19 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ['id', 'owner', 'title', 'description', 'lessons', 'lesson_count', 'is_subscribed']
+        fields = [
+            "id",
+            "owner",
+            "title",
+            "description",
+            "lessons",
+            "lesson_count",
+            "is_subscribed",
+        ]
 
     def get_is_subscribed(self, obj):
-        user = self.context['request'].user
+        user = self.context["request"].user
         return Subscription.objects.filter(user=user, course=obj).exists()
 
     def get_lesson_count(self, obj):
         return obj.lessons.count()
-
-
-
