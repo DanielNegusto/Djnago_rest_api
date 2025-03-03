@@ -83,21 +83,41 @@ jobs:
       - name: Deploy to Server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            echo "Pulling Docker image..."
-            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-            echo "Stopping existing container..."
-            sudo docker stop myapp || true
-            echo "Removing existing container..."
-            sudo docker rm myapp || true
-            echo "Starting new container..."
-            sudo docker run -d --name myapp -p 80:8000 \
-              -e SECRET_KEY='${{ secrets.SECRET_KEY }}' \
-              -e POSTGRES_DB='${{ secrets.POSTGRES_DB }}' \
-              -e POSTGRES_USER='${{ secrets.POSTGRES_USER }}' \
-              -e POSTGRES_PASSWORD='${{ secrets.POSTGRES_PASSWORD }}' \
-              -e STRIPE_TEST_SECRET_KEY='${{ secrets.STRIPE_TEST_SECRET_KEY }}' \
-              -e EMAIL_HOST_USER='${{ secrets.EMAIL_HOST_USER }}' \
-              -e EMAIL_HOST_PASSWORD='${{ secrets.EMAIL_HOST_PASSWORD }}' \
-              ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-            echo "Deployment complete."
+          echo "Pulling Docker image..."
+          sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+          echo "Stopping existing container..."
+          sudo docker stop myapp || true
+          echo "Removing existing container..."
+          sudo docker rm myapp || true
+          echo "Starting new container..."
+          sudo docker run -d --name myapp -p 8000:8000 \
+            -e SECRET_KEY='${{ secrets.SECRET_KEY }}' \
+            -e POSTGRES_DB='${{ secrets.POSTGRES_DB }}' \
+            -e POSTGRES_USER='${{ secrets.POSTGRES_USER }}' \
+            -e POSTGRES_PASSWORD='${{ secrets.POSTGRES_PASSWORD }}' \
+            -e STRIPE_TEST_SECRET_KEY='${{ secrets.STRIPE_TEST_SECRET_KEY }}' \
+            -e EMAIL_HOST_USER='${{ secrets.EMAIL_HOST_USER }}' \
+            -e EMAIL_HOST_PASSWORD='${{ secrets.EMAIL_HOST_PASSWORD }}' \
+            ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+          
+          echo "Deploying Nginx configuration..."
+          echo "server {
+                  listen 80;
+                  server_name your_domain.com;  # Замените на ваш домен или IP-адрес
+          
+                  location /static/ {
+                      alias /app/staticfiles/;
+                  }
+          
+                  location / {
+                      proxy_pass http://127.0.0.1:8000;  # Убедитесь, что это адрес вашего приложения
+                  }
+              }" | sudo tee /etc/nginx/sites-available/myapp
+          
+          sudo ln -s /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/
+          
+          # Проверка конфигурации Nginx перед перезапуском
+          sudo nginx -t && echo "Nginx configuration is valid. Restarting..."
+          sudo systemctl restart nginx
+          echo "Deployment complete."
           EOF
