@@ -71,6 +71,9 @@ jobs:
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      STRIPE_TEST_SECRET_KEY: ${{ secrets.STRIPE_TEST_SECRET_KEY }}
+      EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
+      EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
     steps:
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.8.0
@@ -87,6 +90,14 @@ jobs:
             echo "Removing existing container..."
             sudo docker rm myapp || true
             echo "Starting new container..."
-            sudo docker run -d --name myapp -p 80:8000 -e SECRET_KEY='${{ secrets.SECRET_KEY }}' -e POSTGRES_DB='${{ secrets.POSTGRES_DB }}' -e POSTGRES_USER='${{ secrets.POSTGRES_USER }}' -e POSTGRES_PASSWORD='${{ secrets.POSTGRES_PASSWORD }}' ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+            sudo docker run -d --name myapp -p 80:8000 \
+              -e SECRET_KEY='${{ secrets.SECRET_KEY }}' \
+              -e POSTGRES_DB='${{ secrets.POSTGRES_DB }}' \
+              -e POSTGRES_USER='${{ secrets.POSTGRES_USER }}' \
+              -e POSTGRES_PASSWORD='${{ secrets.POSTGRES_PASSWORD }}' \
+              -e STRIPE_TEST_SECRET_KEY='${{ secrets.STRIPE_TEST_SECRET_KEY }}' \
+              -e EMAIL_HOST_USER='${{ secrets.EMAIL_HOST_USER }}' \
+              -e EMAIL_HOST_PASSWORD='${{ secrets.EMAIL_HOST_PASSWORD }}' \
+              ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
             echo "Deployment complete."
           EOF
